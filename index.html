@@ -1846,11 +1846,13 @@
             const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i;
             const userAgent = navigator.userAgent;
             
-            // Check user agent AND screen size for better detection
+            // Check if it's actually a mobile device (not just small window)
             const isMobileDevice = mobileRegex.test(userAgent);
-            const isSmallScreen = window.innerWidth <= 768 || window.innerHeight <= 768;
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            const isSmallScreenMobile = window.innerWidth <= 768 && (isMobileDevice || isTouchDevice);
             
-            return isMobileDevice || isSmallScreen;
+            // Only redirect if it's actually a mobile device, not just a narrow desktop window
+            return isMobileDevice && (isSmallScreenMobile || isTouchDevice);
         }
         
         // Only redirect if this is a mobile device/screen
@@ -1860,7 +1862,8 @@
             // window.location.href = 'https://yourusername.github.io/hexuki-mobile/';
             
             // For local testing, redirect to the mobile file:
-            window.location.href = 'mobile-hexuki-sim.html';
+            // TEMPORARILY DISABLED FOR TESTING:
+            // window.location.href = 'mobile-hexuki-sim.html';
         }
     </script>
 
